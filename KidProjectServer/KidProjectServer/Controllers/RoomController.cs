@@ -29,6 +29,18 @@ namespace KidProjectServer.Controllers
         }
 
         // GET: api/Room/{page}/{size}
+        [HttpGet("{page}/{size}/{hostId}")]
+        public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int page, int size, int hostId)
+        {
+            int offset = 0;
+            PagingUtil.GetPageSize(ref page, ref size, ref offset);
+            Room[] rooms = await _context.Rooms.Where(p => p.HostUserID == hostId).OrderByDescending(p => p.CreateDate).Skip(offset).Take(size).ToArrayAsync();
+            int countTotal = await _context.Rooms.Where(p => p.HostUserID == hostId).CountAsync();
+            int totalPage = (int)Math.Ceiling((double)countTotal / size);
+            return Ok(ResponseArrayHandle<Room>.Success(rooms, totalPage));
+        }
+
+        // GET: api/Room/{page}/{size}
         [HttpGet("{page}/{size}")]
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int page, int size)
         {
@@ -73,17 +85,63 @@ namespace KidProjectServer.Controllers
             // Create the room object and save it to the database
             var room = new Room
             {
-                RoomNo = formData.RoomNo,
                 RoomName = formData.RoomName,
                 Description = formData.Description,
                 Image = fileName, // Save the image path to the database
-                PartyID = formData.PartyID,
+                Type = string.Join(",", formData.Type),
+                MinPeople = formData.MinPeople,
+                MaxPeople = formData.MaxPeople,
+                Price = formData.Price,
+                HostUserID = formData.HostUserID,
                 CreateDate = DateTime.UtcNow,
                 LastUpdateDate = DateTime.UtcNow,
                 Status = Constants.STATUS_ACTIVE
             };
+            await _context.Rooms.AddAsync(room);
+            await _context.SaveChangesAsync();
 
-            _context.Rooms.Add(room);
+            List<Slot> listSlotAdd = new List<Slot>();
+            var slot1 = new Slot
+            {
+                RoomID = room.RoomID,
+                StartTime = TextUtil.ConvertStringToTime(formData.SlotStart1),
+                EndTime = TextUtil.ConvertStringToTime(formData.SlotEnd1)
+            };
+            listSlotAdd.Add(slot1);
+
+            if(formData.SlotStart2 != null && formData.SlotEnd2 != null)
+            {
+                var slot2 = new Slot
+                {
+                    RoomID = room.RoomID,
+                    StartTime = TextUtil.ConvertStringToTime(formData.SlotStart2),
+                    EndTime = TextUtil.ConvertStringToTime(formData.SlotEnd2)
+                };
+                listSlotAdd.Add(slot2);
+            }
+
+            if (formData.SlotStart3 != null && formData.SlotEnd3 != null)
+            {
+                var slot3 = new Slot
+                {
+                    RoomID = room.RoomID,
+                    StartTime = TextUtil.ConvertStringToTime(formData.SlotStart3),
+                    EndTime = TextUtil.ConvertStringToTime(formData.SlotEnd3)
+                };
+                listSlotAdd.Add(slot3);
+            }
+            if (formData.SlotStart4 != null && formData.SlotEnd4 != null)
+            {
+                var slot4 = new Slot
+                {
+                    RoomID = room.RoomID,
+                    StartTime = TextUtil.ConvertStringToTime(formData.SlotStart4),
+                    EndTime = TextUtil.ConvertStringToTime(formData.SlotEnd4)
+                };
+                listSlotAdd.Add(slot4);
+            }
+
+            await _context.Slots.AddRangeAsync(listSlotAdd);
             await _context.SaveChangesAsync();
 
             return Ok(ResponseHandle<Room>.Success(room));
@@ -121,11 +179,10 @@ namespace KidProjectServer.Controllers
             }
 
             // Create the room object and save it to the database
-            roomOld.PartyID = formData.PartyID;
+            roomOld.Type = string.Join(",", formData.Type);
             roomOld.RoomName = formData.RoomName;
             roomOld.Description = formData.Description;
             roomOld.Image = fileName;
-            roomOld.RoomNo = formData.RoomNo;
             roomOld.LastUpdateDate = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
@@ -168,10 +225,20 @@ namespace KidProjectServer.Controllers
     public class RoomFormData
     {
         public int? RoomID { get; set; }
-        public int PartyID { get; set; }
         public string RoomName { get; set; }
-        public string RoomNo { get; set; }
-        public string Description { get; set; }
+        public string SlotStart1 { get; set; }
+        public string? SlotStart2 { get; set; }
+        public string? SlotStart3 { get; set; }
+        public string? SlotStart4 { get; set; }
+        public string SlotEnd1 { get; set; }
+        public string? SlotEnd2 { get; set; }
+        public string? SlotEnd3 { get; set; }
+        public string? SlotEnd4 { get; set; }
+        public int HostUserID { get; set; }
+        public int MinPeople { get; set; }
+        public int MaxPeople { get; set; }
+        public string[] Type { get; set; }
+        public string? Description { get; set; }
         public IFormFile? Image { get; set; } // This property will hold the uploaded image file
         public int Price { get; set; }
     }
