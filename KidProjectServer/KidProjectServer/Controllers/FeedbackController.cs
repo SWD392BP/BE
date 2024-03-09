@@ -65,7 +65,12 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseHandle<Feedback>.Success(feedback));
         }
 
-
+        [HttpGet("byUserIDAndBooking")]
+        public async Task<ActionResult<IEnumerable<Feedback>>> GetAllFeedback()
+        {
+            Feedback feedback = await _context.Feedbacks.ToListAsycn();
+            return Ok(ResponseHandle<Feedback>.Success(feedback));
+        }
 
     }
 
