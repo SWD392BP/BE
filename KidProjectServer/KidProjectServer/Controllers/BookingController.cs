@@ -36,10 +36,6 @@ namespace KidProjectServer.Controllers
         public async Task<ActionResult<IEnumerable<Booking>>> GetByID(int id)
         {
             Booking booking = await _bookingService.GetBookingByID(id);
-            if(booking == null)
-            {
-                return Ok(ResponseHandle<Booking>.Error("Booking not found"));
-            }
             return Ok(ResponseHandle<Booking>.Success(booking));
         }
 

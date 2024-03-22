@@ -176,6 +176,8 @@ namespace KidProjectServer.Repositories
             return user;
         }
 
+
+        //Search user by name, phonenumber, email
         public async Task<User[]> SearchUser(UserSearchForm searchDto, string keyword, int offset, int size)
         {
             var query = from users in _context.Users
@@ -187,6 +189,8 @@ namespace KidProjectServer.Repositories
             return await query.OrderByDescending(p => p.CreateDate).Skip(offset).Take(size).ToArrayAsync();
         }
 
+
+        //update infor user 
         public async Task<User> UpdateInfoUser(string? fileName, User userOld, RegisterUserForm userDto)
         {
             userOld.Image = fileName;

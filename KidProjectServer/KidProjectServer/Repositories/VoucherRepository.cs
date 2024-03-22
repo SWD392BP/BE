@@ -24,6 +24,8 @@ namespace KidProjectServer.Repositories
             _context = context;
         }
 
+
+        //Tạo defalut 3 voucher ban đầu
         public async Task Create3DefaultVouchers(int userId)
         {
             List<Voucher> listVoucherAdd = new List<Voucher>();
@@ -65,6 +67,8 @@ namespace KidProjectServer.Repositories
             await _context.SaveChangesAsync();
         }
 
+
+        //Change status voucher
         public async Task DisableVoucherStatus(int voucherID)
         {
             Voucher voucher = await _context.Vouchers.FindAsync(voucherID);
@@ -75,6 +79,8 @@ namespace KidProjectServer.Repositories
             }
         }
 
+
+        //Getvoucher by userId
         public async Task<VoucherDto[]> GetVoucherByUserID(int id)
         {
             return await (from vouchers in _context.Vouchers

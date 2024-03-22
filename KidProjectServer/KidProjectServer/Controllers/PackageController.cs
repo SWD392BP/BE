@@ -34,12 +34,18 @@ namespace KidProjectServer.Controllers
             _statisticService = statisticService;
         }
 
+
+
+        //Check host buy package
+
         [HttpGet("checkPackage/{hostId}")]
         public async Task<ActionResult<IEnumerable<Boolean>>> CheckIsBuyPackage(int hostId)
         {
             bool isBuyPackage = await _packageService.CheckIsBuyPackage(hostId);
             return Ok(ResponseHandle<Boolean>.Success(isBuyPackage));
         }
+
+        //Get package paging
 
         [HttpGet("{page}/{size}")]
         public async Task<ActionResult<IEnumerable<Package>>> GetPackages(int page, int size)
@@ -52,6 +58,8 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseArrayHandle<Package>.Success(packages, totalPage));
         }
 
+        //Get package order paging
+
         [HttpGet("packageOrder/{page}/{size}")]
         public async Task<ActionResult<IEnumerable<PackageOrderDto>>> GetPackageOrder(int page, int size)
         {
@@ -63,12 +71,16 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseArrayHandle<PackageOrderDto>.Success(packages, totalPage));
         }
 
+        //Create new package
+
         [HttpPost("createOrder")]
         public async Task<ActionResult<IEnumerable<PackageOrder>>> CreatePackageOrder([FromForm] OrderPackageForm order)
         {
             PackageOrder packageOrders = await _packageService.CreatePackageOrder(order);
             return Ok(ResponseHandle<PackageOrder>.Success(packageOrders));
         }
+
+        //change status booking
 
         [HttpGet("changeStatus/{id}/{status}")]
         public async Task<ActionResult<IEnumerable<PackageOrder>>> ChangeStatusBooking(int id, string status)
@@ -90,6 +102,9 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseHandle<PackageOrder>.Success(packageOrder));
         }
 
+
+        //get order package by userId paging
+
         [HttpGet("ordersByUserID/{userId}/{page}/{size}")]
         public async Task<ActionResult<IEnumerable<PackageOrder>>> GetOrdersByUserID(int userId, int page, int size)
         {
@@ -100,6 +115,8 @@ namespace KidProjectServer.Controllers
             int totalPage = (int)Math.Ceiling((double)countTotal / size);
             return Ok(ResponseArrayHandle<PackageOrder>.Success(packages, totalPage));
         }
+
+        //get order package by id
 
         [HttpGet("orderId/{id}")]
         public async Task<ActionResult<PackageOrder>> GetOrderPackage(int id)
@@ -112,6 +129,8 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseHandle<PackageOrder>.Success(package));
         }
 
+        //Get package by id
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Package>> GetPackage(int id)
         {
@@ -122,6 +141,9 @@ namespace KidProjectServer.Controllers
             }
             return Ok(ResponseHandle<Package>.Success(package));
         }
+
+
+        //craete new package
 
         [HttpPost]
         public async Task<ActionResult<Package>> CreatePackage([FromForm] PackageFormData formData)
@@ -135,6 +157,8 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseHandle<Package>.Success(package));
         }
 
+        //update package
+
         [HttpPut]
         public async Task<IActionResult> UpdatePackage([FromForm] PackageFormData formData)
         {
@@ -147,6 +171,8 @@ namespace KidProjectServer.Controllers
             packageOld = await _packageService.UpdatePackage(fileName, packageOld, formData);
             return Ok(ResponseHandle<Package>.Success(packageOld));
         }
+
+        //change status package to Inactive
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePackage(int id)

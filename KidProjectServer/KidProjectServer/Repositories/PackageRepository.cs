@@ -92,14 +92,15 @@ namespace KidProjectServer.Repositories
             return package;
         }
 
+        //create new package order
         public async Task<PackageOrder> CreatePackageOrder(OrderPackageForm order)
         {
             Package package = await _context.Packages.Where(p => p.PackageID == order.PackageID && p.Status == Constants.STATUS_ACTIVE).FirstOrDefaultAsync();
             User user = await _context.Users.Where(p => p.UserID == order.UserID && p.Status == Constants.STATUS_ACTIVE).FirstOrDefaultAsync();
             PackageOrder packageOrders = new PackageOrder
             {
-                PackageID = package.PackageID,
-                UserID = user.UserID,
+                PackageID = package.PackageID,// lấy package id
+                UserID = user.UserID, //lấy user mua
                 PackageName = package.PackageName,
                 PackageDescription = package.Description,
                 PackagePrice = package.Price,
@@ -114,6 +115,8 @@ namespace KidProjectServer.Repositories
             await _context.SaveChangesAsync();
             return packageOrders;
         }
+
+        //change status package by id
 
         public async Task<Package?> DeletePackageByID(int id)
         {
@@ -134,11 +137,14 @@ namespace KidProjectServer.Repositories
             return await _context.PackageOrders.Where(p => p.UserID == userId).Skip(offset).Take(size).OrderByDescending(p => p.CreateDate).ToArrayAsync();
         }
 
+
+        //get package by id
         public async Task<Package> GetPackageByID(int id)
         {
             return await _context.Packages.FindAsync(id);
         }
 
+        //get order package by id
         public async Task<PackageOrder> GetPackageOrderByID(int id)
         {
             return await _context.PackageOrders.Where(p => p.PackageOrderID == id).FirstOrDefaultAsync();
@@ -175,9 +181,12 @@ namespace KidProjectServer.Repositories
             packageOld.Image = fileName;
             packageOld.Price = formData.Price;
             packageOld.LastUpdateDate = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
             return packageOld;
         }
+
+        //Update status for order package
 
         public async Task<PackageOrder?> UpdateStatusPackageOrder(int id, string status)
         {

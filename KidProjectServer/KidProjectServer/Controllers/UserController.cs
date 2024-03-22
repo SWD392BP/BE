@@ -35,6 +35,8 @@ namespace KidProjectServer.Controllers
             _configuration = configuration;
         }
 
+        //get user by userId
+
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -45,6 +47,8 @@ namespace KidProjectServer.Controllers
             }
             return Ok(ResponseHandle<User>.Success(user));
         }
+
+        //get user by role paging
 
         [HttpGet("byRole/{role}/{page}/{size}")]
         public async Task<IActionResult> GetUserByRolePaging(string role, int page, int size)
@@ -57,6 +61,8 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseArrayHandle<User>.Success(users, totalPage));
         }
 
+        //change status to ban user
+
         [HttpGet("changeStatus/{userId}/{status}")]
         public async Task<IActionResult> ChangeStatusUser(int userId, string status)
         {
@@ -67,6 +73,8 @@ namespace KidProjectServer.Controllers
             }
             return Ok(ResponseHandle<User>.Success(user));
         }
+
+        //search user
 
         [HttpPost("searchUser")]
         public async Task<IActionResult> SearchUser([FromForm] UserSearchForm searchDto)
@@ -84,6 +92,8 @@ namespace KidProjectServer.Controllers
         }
 
 
+        //update user
+
         [HttpPut("updateInfo")]
         public async Task<IActionResult> UpdateUserInfo([FromForm] RegisterUserForm userDto)
         {
@@ -91,7 +101,7 @@ namespace KidProjectServer.Controllers
             {
                 if (string.IsNullOrEmpty(userDto.FullName) || string.IsNullOrEmpty(userDto.PhoneNumber) || string.IsNullOrEmpty(userDto.Email))
                 {
-                    return Ok(ResponseHandle<LoginResponse>.Error("Invalid info user to register"));
+                    return Ok(ResponseHandle<LoginResponse>.Error("Invalid info user to update"));
                 }
                 User? userOld = await _userService.GetUserByID(userDto.UserID??0);
                 if (userOld == null)

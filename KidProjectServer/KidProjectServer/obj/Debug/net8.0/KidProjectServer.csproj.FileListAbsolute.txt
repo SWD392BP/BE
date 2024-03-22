@@ -275,7 +275,6 @@ C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\
 C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\KidProjectServer.csproj.CoreCompileInputs.cache
 C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\KidProjectServer.MvcApplicationPartsAssemblyInfo.cs
 C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\KidProjectServer.MvcApplicationPartsAssemblyInfo.cache
-C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\KidProjectServer.sourcelink.json
 C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\staticwebassets.build.json
 C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\staticwebassets.development.json
 C:\App\Semester 7\SWD392 Project\BE\KidProjectServer\KidProjectServer\obj\Debug\net8.0\staticwebassets\msbuild.KidProjectServer.Microsoft.AspNetCore.StaticWebAssets.props
