@@ -25,15 +25,16 @@ namespace KidProjectServer.Controllers
         private readonly IStatisticService _statisticService;
         private readonly IVoucherService _voucherService;
         private readonly IImageService _imageService;
+        private readonly DBConnection _context;
 
-        public PackageController(IPackageService packageService, IStatisticService statisticService, IVoucherService voucherService, IImageService imageService)
+        public PackageController(DBConnection context, IPackageService packageService, IStatisticService statisticService, IVoucherService voucherService, IImageService imageService)
         {
             _packageService = packageService;
             _imageService = imageService;
             _voucherService = voucherService;
             _statisticService = statisticService;
+            _context = context;
         }
-
 
 
         //Check host buy package
@@ -65,8 +66,20 @@ namespace KidProjectServer.Controllers
         {
             int offset = 0;
             PagingUtil.GetPageSize(ref page, ref size, ref offset);
-            PackageOrderDto[] packages = await _packageService.GetPackageOrderPaging(offset, size);
-            int countTotal = await _packageService.CountPackageOrderPaging();
+            var query = from packageOrders in _context.PackageOrders
+                        join users in _context.Users on packageOrders.UserID equals users.UserID
+                        select new PackageOrderDto
+                        {
+                            PackageOrderID = packageOrders.PackageOrderID,
+                            FullName = users.FullName,
+                            PaymentAmount = packageOrders.PaymentAmount,
+                            PackageName = packageOrders.PackageName,
+                            PackagePrice = packageOrders.PackagePrice,
+                            VoucherPrice = packageOrders.VoucherPrice,
+                            CreateDate = packageOrders.CreateDate,
+                        };
+            PackageOrderDto[] packages = await query.Skip(offset).Take(size).OrderByDescending(p => p.CreateDate).ToArrayAsync();
+            int countTotal = await query.CountAsync();
             int totalPage = (int)Math.Ceiling((double)countTotal / size);
             return Ok(ResponseArrayHandle<PackageOrderDto>.Success(packages, totalPage));
         }

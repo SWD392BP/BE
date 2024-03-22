@@ -2932,11 +2932,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\App\\Semester 7\\SWD392 Project\\BE\\KidProjectServer\\KidProjectServer\\KidProjectServer.csproj",
+      "projectUniqueName": "C:\\App\\Semester 7\\SWD392\\Project\\BE\\KidProjectServer\\KidProjectServer\\KidProjectServer.csproj",
       "projectName": "KidProjectServer",
-      "projectPath": "C:\\App\\Semester 7\\SWD392 Project\\BE\\KidProjectServer\\KidProjectServer\\KidProjectServer.csproj",
+      "projectPath": "C:\\App\\Semester 7\\SWD392\\Project\\BE\\KidProjectServer\\KidProjectServer\\KidProjectServer.csproj",
       "packagesPath": "C:\\Users\\quans\\.nuget\\packages\\",
-      "outputPath": "C:\\App\\Semester 7\\SWD392 Project\\BE\\KidProjectServer\\KidProjectServer\\obj\\",
+      "outputPath": "C:\\App\\Semester 7\\SWD392\\Project\\BE\\KidProjectServer\\KidProjectServer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
