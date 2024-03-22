@@ -142,7 +142,8 @@ namespace KidProjectServer.Repositories
                         where bookings.CreateDate != null &&
                              bookings.CreateDate.Value.Month == currentMonth &&
                              bookings.CreateDate.Value.Year == currentYear &&
-                             users.Status == Constants.STATUS_ACTIVE
+                             users.Status == Constants.STATUS_ACTIVE &&
+                             bookings.Status == Constants.BOOKING_STATUS_PAID
                         group bookings by users into g
                         orderby g.Sum(b => b.PaymentAmount) descending
                         select new UserTopDto
