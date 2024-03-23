@@ -74,7 +74,7 @@ namespace KidProjectServer.Controllers
             return Ok(ResponseHandle<User>.Success(user));
         }
 
-        //search user
+        //search user paging
 
         [HttpPost("searchUser")]
         public async Task<IActionResult> SearchUser([FromForm] UserSearchForm searchDto)
@@ -121,6 +121,8 @@ namespace KidProjectServer.Controllers
                 return Ok(ResponseHandle<LoginResponse>.Error("Error occur in server"));
             }
         }
+
+        //change PW
 
         [HttpPut("changePW")]
         public async Task<IActionResult> ChangePassword([FromForm] ChangePWForm userDto)

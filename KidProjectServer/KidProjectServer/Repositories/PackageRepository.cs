@@ -95,12 +95,32 @@ namespace KidProjectServer.Repositories
         //create new package order
         public async Task<PackageOrder> CreatePackageOrder(OrderPackageForm order)
         {
-            Package package = await _context.Packages.Where(p => p.PackageID == order.PackageID && p.Status == Constants.STATUS_ACTIVE).FirstOrDefaultAsync();
-            User user = await _context.Users.Where(p => p.UserID == order.UserID && p.Status == Constants.STATUS_ACTIVE).FirstOrDefaultAsync();
+            // Kiểm tra xem người dùng đã mua gói này trước đó chưa
+            var existingOrder = await _context.PackageOrders
+                .Where(po => po.PackageID == order.PackageID && po.UserID == order.UserID)
+                .FirstOrDefaultAsync();
+
+            if (existingOrder != null)
+            {
+                // Đã có đơn hàng tồn tại cho gói và người dùng này
+                // Bạn có thể xử lý tùy thuộc vào yêu cầu của ứng dụng của bạn
+                // Ví dụ: bạn có thể ném một ngoại lệ hoặc trả về null để thông báo lỗi cho người dùng
+                throw new InvalidOperationException("Đơn hàng cho gói này đã tồn tại.");
+            }
+
+            // Tiếp tục tạo đơn hàng mới nếu không có đơn hàng tồn tại
+            Package package = await _context.Packages
+                .Where(p => p.PackageID == order.PackageID && p.Status == Constants.STATUS_ACTIVE)
+                .FirstOrDefaultAsync();
+
+            User user = await _context.Users
+                .Where(p => p.UserID == order.UserID && p.Status == Constants.STATUS_ACTIVE)
+                .FirstOrDefaultAsync();
+
             PackageOrder packageOrders = new PackageOrder
             {
-                PackageID = package.PackageID,// lấy package id
-                UserID = user.UserID, //lấy user mua
+                PackageID = package.PackageID,
+                UserID = user.UserID,
                 PackageName = package.PackageName,
                 PackageDescription = package.Description,
                 PackagePrice = package.Price,
@@ -113,8 +133,10 @@ namespace KidProjectServer.Repositories
 
             await _context.PackageOrders.AddAsync(packageOrders);
             await _context.SaveChangesAsync();
+
             return packageOrders;
         }
+
 
         //change status package by id
 

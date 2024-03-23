@@ -25,6 +25,8 @@ namespace KidProjectServer.Repositories
         {
             _context = context;
         }
+
+        //thống kê số package paid
         public async Task AddStatisticCountPackage()
         {
             int currentMonth = DateTime.UtcNow.Month;
@@ -50,6 +52,9 @@ namespace KidProjectServer.Repositories
                 ordersStatistic.Amount += value;
             }
         }
+
+
+        //thống kê booking paid
         public async Task AddStatisticBookingPaid()
         {
             
@@ -77,6 +82,8 @@ namespace KidProjectServer.Repositories
             }
             await _context.SaveChangesAsync();
         }
+
+        // thống kê rating
         public async Task AddStatisticCountRating()
         {
 
@@ -105,6 +112,7 @@ namespace KidProjectServer.Repositories
         }
 
 
+        //thống kê doanh thu booking
         public async Task AddStatisticBookingRevenue(int revenue)
         {
             int currentMonth = DateTime.UtcNow.Month;
